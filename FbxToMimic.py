@@ -54,11 +54,16 @@ with open('./rThigh.json') as json_data:
         print(f"[", file=output)
 
         #Start of Keyframes
-        for i in range(0,30):
+        numFrames = 30
+        for i in range(0,numFrames):
+            if i < (numFrames - 1):     # put comma at end of all arrays except last one (JSON format)
+                ending = ","
+            else:
+                ending = ""
             quat = euler_to_quaternion(d["X"][(2*i)+1], d["Y"][(2*i)+1], d["Z"][(2*i)+1])
-            print(f"[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,{quat[3]},{quat[0]},{quat[1]},{quat[2]},0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],", file=output)
+            print(f"[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,{quat[3]},{quat[0]},{quat[1]},{quat[2]},0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]{ending}", file=output)
             #print(f"[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,{w},{x},{y},{z},0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]", file=output)
 
-    #Closing up file
-    print(f"]", file=output)
-    print(f"}}", file=output)
+        #Closing up file
+        print(f"]", file=output)
+        print(f"}}", file=output)

@@ -30,9 +30,9 @@ def quaternion_to_euler(x, y, z, w):
 
     return X, Y, Z
 
-euler_Original = (np.random.random(3) * 1).tolist() # Generate random rotation angles for XYZ within the range [0, 360)
-quat = euler_to_quaternion(euler_Original[0], euler_Original[1], euler_Original[2]) # Convert to Quaternion
-newEulerRot = quaternion_to_euler(quat[0], quat[1], quat[2], quat[3]) #Convert the Quaternion to Euler angles
+# euler_Original = (np.random.random(3) * 1).tolist() # Generate random rotation angles for XYZ within the range [0, 360)
+# quat = euler_to_quaternion(euler_Original[0], euler_Original[1], euler_Original[2]) # Convert to Quaternion
+# newEulerRot = quaternion_to_euler(quat[0], quat[1], quat[2], quat[3]) #Convert the Quaternion to Euler angles
 
 # print ("Euler: ")
 # print (euler_Original)

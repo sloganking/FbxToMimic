@@ -34,16 +34,31 @@ euler_Original = (np.random.random(3) * 1).tolist() # Generate random rotation a
 quat = euler_to_quaternion(euler_Original[0], euler_Original[1], euler_Original[2]) # Convert to Quaternion
 newEulerRot = quaternion_to_euler(quat[0], quat[1], quat[2], quat[3]) #Convert the Quaternion to Euler angles
 
-print ("Euler: ")
-print (euler_Original)
-print ("quat: ")
-print (quat)
-print ("Final Euler: ")
-print (newEulerRot)
+# print ("Euler: ")
+# print (euler_Original)
+# print ("quat: ")
+# print (quat)
+# print ("Final Euler: ")
+# print (newEulerRot)
 
 import json
-with open('./model.json') as json_data:
+with open('./rThigh.json') as json_data:
     d = json.load(json_data)
-    #print(d)
 
-    print(d["geometries"][0]["uuid"])
+    with open("Output.txt","w") as output:
+
+        #File Header
+        print(f"{{", file=output)
+        print(f"\"Loop\": \"none\",", file=output)
+        print(f"\"Frames\":", file=output)
+        print(f"[", file=output)
+
+        #Start of Keyframes
+        for i in range(0,30):
+            quat = euler_to_quaternion(d["X"][(2*i)+1], d["Y"][(2*i)+1], d["Z"][(2*i)+1])
+            print(f"[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,{quat[3]},{quat[0]},{quat[1]},{quat[2]},0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],", file=output)
+            #print(f"[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,{w},{x},{y},{z},0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]", file=output)
+
+    #Closing up file
+    print(f"]", file=output)
+    print(f"}}", file=output)

@@ -1,5 +1,6 @@
 import numpy as np
 import math
+import json
 
 def euler_to_quaternion(roll, pitch, yaw):
 
@@ -41,7 +42,6 @@ def quaternion_to_euler(x, y, z, w):
 # print ("Final Euler: ")
 # print (newEulerRot)
 
-import json
 with open('./rThigh.json') as json_data:
     d = json.load(json_data)
 

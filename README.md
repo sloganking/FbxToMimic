@@ -7,4 +7,4 @@ Turns FBX Animation file into a DeepMimic motion file. DeepMimic motion files ar
 ## Plans
 
 - Convert FBX to JSON [Completed, See /Utils]
-- write program to convert JSON to DeepMimic Model file compatible JSON.
+- write program to convert JSON to DeepMimic Model file compatible JSON. [FbxToMimic.py is being written for this]

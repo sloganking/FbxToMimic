@@ -50,6 +50,11 @@ Docs = [
 animated = ["Seconds", "Model:Model::hip", "Model:Model::hip", "Model:Model::chest","Model:Model::neck","Model:Model::rThigh","Model:Model::rShin","Model:Model::rFoot","Model:Model::rShldr","Model:Model::rForeArm","Model:Model::lThigh","Model:Model::lShin","Model:Model::lFoot","Model:Model::lShldr","Model:Model::lForeArm"]
 dimensions = [1,3,4,4,4,4,1,4,4,1,4,1,4,4,1]
 
+
+#testArray = [0.0333320000,36.15644073486328,-47.417903900146484,85.23808288574219,0.3971598881909073,0.5099391074318974,0.480307113544098,-0.5929006717846446,0.9966937693208409,-0.009270758600407925,-0.08061328608623314,-0.004132957580995251,0.9762827643890308,-0.004823241112406072,0.21512515649144553,0.023871894491532812,0.8597030441519741,-0.02268270406528398,-0.5101677945166531,0.011179993297387319,,0.5423884150909892,-0.5203643724543552,-0.3936015867163114,-0.5292575157611576,0.6895779674684611,-0.59665797880739,-0.0641166349016439,0.40542636845231883,,0.8833189395857082,0.020719764882733457,-0.46808997756702864,-0.014495351450821741,,-0.5871534730758694,-0.45218121382303167,0.4915286921865896,-0.45736472719025345,0.6805606196020912,0.5905061544837423,-0.05552285114231231,-0.43018244683467627]
+
+#print(f"Length of testArray:    {len(testArray)}")
+
 # Open files, Start of main program
 with open('./FbxJson.json') as json_data:
     with open("Output.txt","w") as output:
@@ -63,6 +68,7 @@ with open('./FbxJson.json') as json_data:
 
         #Start of Keyframes
         numFrames = d["Takes:"]["Take:19_15"]["Model:Model::hip"]["Channel:Transform"]["Channel:T"]["Channel:X"]["KeyCount"]
+        numFrames = numFrames - 20
         print(f"Numframes: {numFrames}")
         for i in range(0,numFrames):
             keyFrame = "["
@@ -82,8 +88,15 @@ with open('./FbxJson.json') as json_data:
                         Y = d["Takes:"]["Take:19_15"][animated[x]]["Channel:Transform"]["Channel:R"]["Channel:Y"]["Key"][i]
                         X = d["Takes:"]["Take:19_15"][animated[x]]["Channel:Transform"]["Channel:R"]["Channel:X"]["Key"][i]
                         quat = euler_to_quaternion(math.radians(-Z), math.radians(-Y), math.radians(-X))
-                        keyFrame += f"{quat[0]},{quat[1]},{quat[2]},{quat[3]}"
-                    
+                        keyFrame += f",{quat[0]},{quat[1]},{quat[2]},{quat[3]}"
+                    elif dimensions[x] == 1:
+                        if animated[x] == "Model:Model::rForeArm" or animated[x] == "Model:Model::lForeArm":
+                            keyFrame += ","
+                            keyFrame += str(math.radians(d["Takes:"]["Take:19_15"][animated[x]]["Channel:Transform"]["Channel:R"]["Channel:Z"]["Key"][i]))
+                        elif animated[x] == "Model:Model::rShin" or animated[x] == "Model:Model::lShin":
+                            keyFrame += ","
+                            keyFrame += str(math.radians(d["Takes:"]["Take:19_15"][animated[x]]["Channel:Transform"]["Channel:R"]["Channel:Z"]["Key"][i]))
+
             #closing keyframe
             keyFrame += "]"
             if i < (numFrames - 1):     # put comma at end of all arrays except last one (JSON format)

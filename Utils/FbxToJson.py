@@ -119,39 +119,6 @@ with open("13_29.fbx") as input:
 
 #===============================================================================
 
-            # if content[x][ len(content[x]) - 2] == "{":
-            #     strToPrint += "{"
-
-            # elif len(tokens) > 0:
-            #         if tokens[0][:1] != ";":    # if first char of first token = ";"
-
-            #             stringLeft = ""
-            #             for i in range(curToken,len(tokens)):
-            #                 stringLeft += tokens[i]
-            #             print(stringLeft.split(","))
-
-
-
-            #             if len(stringLeft.split(",")) > 1:
-            #                 strToPrint += stringLeft.split(",")[1]
-            #             else:
-            #                 strToPrint += stringLeft.split(",")[0]
-
-            #             # add comma if next depth == curDepth && not already have comma
-            #             if x < len(content) - 1:
-            #                 if depthOf(content[x]) == depthOf(content[x + 1]):
-            #                     if strToPrint[len(strToPrint) - 1] != ",":
-            #                         strToPrint += ","
-
-
-            #                     # if content[x][ len(content[x]) - 2] != ',':     # -2 for last char that's not "\n"
-            #                     #     strToPrint += ","
-            
-
-
-
-#===============================================================================
-
 
 #if ;, print no line
 #elif the last char is "{"

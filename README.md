@@ -6,5 +6,5 @@ Turns FBX Animation file into a DeepMimic motion file. DeepMimic motion files ar
 
 ## Plans
 
-- Convert FBX to JSON [using three.js JSON converter?](https://github.com/mrdoob/three.js/tree/dev/utils/converters)
+- Convert FBX to JSON [Completed, See /Utils]
 - write program to convert JSON to DeepMimic Model file compatible JSON.

@@ -23,7 +23,8 @@ def getTabs(str):
 
 lastDepth = 0    #initialize depth
 
-with open("13_29.fbx") as input:
+#with open("13_29.fbx") as input:
+with open("19_15.fbx") as input:
     with open("FbxJson.json","w") as output:
 
         content = input.readlines()
@@ -61,6 +62,8 @@ with open("13_29.fbx") as input:
                         strToPrint = "\"CameraIndexName\": \"bad property\""
                     elif tokens[0][:-1] == "Shading":
                         strToPrint = ""
+                    elif tokens[0][:-1] == "ReferenceTime":
+                        strToPrint = "\"ReferenceTime\": 590797937750,"
                     elif tokens[0][:-1] == "Month":
                         strToPrint = "\"Month\": \"bad property\""
                         #add comma if next depth == curDepth && not already have comma

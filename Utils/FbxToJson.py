@@ -27,31 +27,7 @@ with open("13_29.fbx") as input:
         #Start JSON object
         print(f"{{", file=output)
 
-        # for x in range(0,25):
-        #     tabDepth = getTabs(content[x])
-        #     tokens = str.split(content[x])
-        #     #print(f"Line:{x + 1}    Depth: {depthOf(content[x])}")
-        #     for i in range(0,len(tokens)):
-        #         if tokens[0][:1] == ";":    # if first char of first token = ";"
-        #             break
-        #         elif tokens[i][ len(tokens[i]) - 1] == ':':     # if last char of any token = ":"
-        #             print(f"{tabDepth}\"{tokens[i][:-1]}\":", file=output)
-        #         elif tokens[i] == "{":
-        #             print(f"{tabDepth}{{", file=output)
-        #         elif tokens[i] == "}":
-        #             if depthOf(content[x]) < lastDepth:
-        #                 print(f"{tabDepth}}}", file=output)
-        #             else:
-        #                 print(f"{tabDepth}}},", file=output)
-        #         else:
-        #             print(f"{tabDepth}{tokens[i]}", file=output)
-
-        #                 #if inProperty and next token is not a property, write a comma, 
-
-
-
-
-        for x in range(0,25):
+        for x in range(0,len(content)):
             tokens = str.split(content[x])
             tabDepth = getTabs(content[x])
             strToPrint = ""
@@ -62,18 +38,17 @@ with open("13_29.fbx") as input:
                 if tokens[0][ len(tokens[0]) - 1] == ':':
                     strToPrint += f"\"{tokens[0][:-1]}\": "
                     curToken += 1
-            
-            for i in range(curToken,len(tokens)):
-                if len(tokens) > 0:
-                    if tokens[0][:1] == ";":    # if first char of first token = ";"
-                        break
-                    else:
-                        strToPrint += tokens[i]
 
-            # add comma if next depth == curDepth && not already have comma
-            if depthOf(content[x]) == depthOf(content[x + 1]):
-                if content[x][ len(content[x]) - 1] != ',':
-                    strToPrint += ","
+            if len(tokens) > 0:
+                    if tokens[0][:1] != ";":    # if first char of first token = ";"
+                        for i in range(curToken,len(tokens)):
+                                    strToPrint += tokens[i]
+
+                        # add comma if next depth == curDepth && not already have comma
+                        if x < len(content) - 1:
+                            if depthOf(content[x]) == depthOf(content[x + 1]):
+                                if content[x][ len(content[x]) - 2] != ',':     # -2 for last char that's not "\n"
+                                    strToPrint += ","
             
             if strToPrint != "":
                 strToPrint = f"{tabDepth}{strToPrint}"

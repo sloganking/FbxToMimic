@@ -4,30 +4,97 @@ import json
 
 # Function declarations
 def euler_to_quaternion(roll, pitch, yaw):
-
     qw = np.cos(roll/2) * np.cos(pitch/2) * np.cos(yaw/2) + np.sin(roll/2) * np.sin(pitch/2) * np.sin(yaw/2)
     qx = np.sin(roll/2) * np.cos(pitch/2) * np.cos(yaw/2) - np.cos(roll/2) * np.sin(pitch/2) * np.sin(yaw/2)
     qy = np.cos(roll/2) * np.sin(pitch/2) * np.cos(yaw/2) + np.sin(roll/2) * np.cos(pitch/2) * np.sin(yaw/2)
     qz = np.cos(roll/2) * np.cos(pitch/2) * np.sin(yaw/2) - np.sin(roll/2) * np.sin(pitch/2) * np.cos(yaw/2)
-
     return [qw, qx, qy, qz]
 
 def quaternion_to_euler(x, y, z, w):
 
+    #Calc X
     t0 = +2.0 * (w * x + y * z)
     t1 = +1.0 - 2.0 * (x * x + y * y)
     X = math.atan2(t0, t1)
 
+    #Calc Y
     t2 = +2.0 * (w * y - z * x)
     t2 = +1.0 if t2 > +1.0 else t2
     t2 = -1.0 if t2 < -1.0 else t2
     Y = math.asin(t2)
 
+    #Calc Z
     t3 = +2.0 * (w * z + x * y)
     t4 = +1.0 - 2.0 * (y * y + z * z)
     Z = math.atan2(t3, t4)
 
     return X, Y, Z
+
+def getTimesIn(obj):
+    timeList = []
+
+    # Loop though all animated items but not the time attribute
+    for i in range(1,len(animated)):
+
+        #Add all new times in item's T channel
+        tSize = len(obj["Takes:"]["Take:19_15"][animated[i]]["Channel:Transform"]["Channel:T"]["Channel:X"]["Key"])
+        for x in range(0,tSize):
+            tString = obj["Takes:"]["Take:19_15"][animated[i]]["Channel:Transform"]["Channel:T"]["Channel:X"]["Key"][x]
+            tTokens = tString.split(",")
+            tTime = tTokens[0]
+            if tTime not in timeList:
+                timeList.append(tTime)
+
+        #Add all new times in item's R channel
+        rSize = len(obj["Takes:"]["Take:19_15"][animated[i]]["Channel:Transform"]["Channel:R"]["Channel:X"]["Key"])
+        for x in range(0,rSize):
+            rString = obj["Takes:"]["Take:19_15"][animated[i]]["Channel:Transform"]["Channel:R"]["Channel:X"]["Key"][x]
+            rTokens = rString.split(",")
+            rTime = rTokens[0]
+            if rTime not in timeList:
+                timeList.append(rTime)
+
+    #Sorts list by integers
+    timeList = sorted(timeList, key=int)
+
+    return timeList
+
+def timeInKey(time, key):
+    #Create list of key Times
+    keyTimes = []
+    for x in range(0,len(key)):
+        keyLineString = key[x]
+        keyLineTokens = keyLineString.split(",")
+        keyTimes.append(keyLineTokens[0])
+
+    return time in keyTimes
+
+def angleOfKeyAtTime(key, time):
+    #Create list of key Times
+    keyTimes = []
+    for x in range(0,len(key)):
+        keyLineString = key[x]
+        keyLineTokens = keyLineString.split(",")
+        keyTimes.append(keyLineTokens[0])
+
+    if time in keyTimes:
+        index = keyTimes.index(time)
+        Tokens = key[index].split(",")
+        angle = Tokens[1]
+        return angle
+    else:
+        return False
+
+def indexOfAnimated(anim):
+    index = 0
+
+    for i in range(0,len(animated)):
+        if animated[i] != anim:
+            index = index + 1
+        else:
+            break
+    
+    return index
 
 # Initilize variables
 Docs = [
@@ -50,11 +117,6 @@ Docs = [
 animated = ["Seconds", "Model:Model::hip", "Model:Model::hip", "Model:Model::chest","Model:Model::neck","Model:Model::rThigh","Model:Model::rShin","Model:Model::rFoot","Model:Model::rShldr","Model:Model::rForeArm","Model:Model::lThigh","Model:Model::lShin","Model:Model::lFoot","Model:Model::lShldr","Model:Model::lForeArm"]
 dimensions = [1,3,4,4,4,4,1,4,4,1,4,1,4,4,1]
 
-
-#testArray = [0.0333320000,36.15644073486328,-47.417903900146484,85.23808288574219,0.3971598881909073,0.5099391074318974,0.480307113544098,-0.5929006717846446,0.9966937693208409,-0.009270758600407925,-0.08061328608623314,-0.004132957580995251,0.9762827643890308,-0.004823241112406072,0.21512515649144553,0.023871894491532812,0.8597030441519741,-0.02268270406528398,-0.5101677945166531,0.011179993297387319,,0.5423884150909892,-0.5203643724543552,-0.3936015867163114,-0.5292575157611576,0.6895779674684611,-0.59665797880739,-0.0641166349016439,0.40542636845231883,,0.8833189395857082,0.020719764882733457,-0.46808997756702864,-0.014495351450821741,,-0.5871534730758694,-0.45218121382303167,0.4915286921865896,-0.45736472719025345,0.6805606196020912,0.5905061544837423,-0.05552285114231231,-0.43018244683467627]
-
-#print(f"Length of testArray:    {len(testArray)}")
-
 # Open files, Start of main program
 with open('./FbxJson.json') as json_data:
     with open("Output.txt","w") as output:
@@ -67,51 +129,125 @@ with open('./FbxJson.json') as json_data:
         print(f"[", file=output)
 
         #Start of Keyframes
-        numFrames = d["Takes:"]["Take:19_15"]["Model:Model::hip"]["Channel:Transform"]["Channel:T"]["Channel:X"]["KeyCount"]
-        numFrames = numFrames - 20
-        print(f"Numframes: {numFrames}")
-        for i in range(0,numFrames):
-            keyFrame = "["
-            for x in range(0,len(Docs)):
-                if x == 0:
-                    keyFrame += "0.0333320000"
-                elif x == 1:
-                    keyFrame += ","
-                    keyFrame += str(d["Takes:"]["Take:19_15"]["Model:Model::hip"]["Channel:Transform"]["Channel:T"]["Channel:X"]["Key"][i]) 
-                    keyFrame += ","
-                    keyFrame += str(d["Takes:"]["Take:19_15"]["Model:Model::hip"]["Channel:Transform"]["Channel:T"]["Channel:Y"]["Key"][i]) 
-                    keyFrame += ","
-                    keyFrame += str(d["Takes:"]["Take:19_15"]["Model:Model::hip"]["Channel:Transform"]["Channel:T"]["Channel:Z"]["Key"][i]) 
-                else:
-                    if dimensions[x] == 4:
-                        Z = d["Takes:"]["Take:19_15"][animated[x]]["Channel:Transform"]["Channel:R"]["Channel:Z"]["Key"][i]
-                        Y = d["Takes:"]["Take:19_15"][animated[x]]["Channel:Transform"]["Channel:R"]["Channel:Y"]["Key"][i]
-                        X = d["Takes:"]["Take:19_15"][animated[x]]["Channel:Transform"]["Channel:R"]["Channel:X"]["Key"][i]
-                        quat = euler_to_quaternion(math.radians(-Z), math.radians(-Y), math.radians(-X))
-                        keyFrame += f",{quat[0]},{quat[1]},{quat[2]},{quat[3]}"
-                    elif dimensions[x] == 1:
-                        if animated[x] == "Model:Model::rForeArm" or animated[x] == "Model:Model::lForeArm":
-                            keyFrame += ","
-                            keyFrame += str(math.radians(d["Takes:"]["Take:19_15"][animated[x]]["Channel:Transform"]["Channel:R"]["Channel:Z"]["Key"][i]))
-                        elif animated[x] == "Model:Model::rShin" or animated[x] == "Model:Model::lShin":
-                            keyFrame += ","
-                            keyFrame += str(math.radians(d["Takes:"]["Take:19_15"][animated[x]]["Channel:Transform"]["Channel:R"]["Channel:Z"]["Key"][i]))
+        listOfTimes = getTimesIn(d)
+        
+        #For every unique time, create a keyFrame
+        keyFrame = []
+        for i in range(0,len(listOfTimes)):
+            oldKeyframe = keyFrame
+            keyFrame = []
 
-            #closing keyframe
-            keyFrame += "]"
-            if i < (numFrames - 1):     # put comma at end of all arrays except last one (JSON format)
-                keyFrame += ","
+            #Append Time
+            if i == 0:
+                keyFrame.append(int(listOfTimes[i]) * 0.00000000002)
             else:
-                keyFrame += ""
+                keyFrame.append((int(listOfTimes[i]) - int(listOfTimes[i-1])) * 0.00000000002)
 
-            # Write keyFrame to file
-            print(f"{keyFrame}", file=output)
+            # #Append Root position
+            xKey = d["Takes:"]["Take:19_15"]["Model:Model::hip"]["Channel:Transform"]["Channel:T"]["Channel:X"]["Key"]
+            yKey = d["Takes:"]["Take:19_15"]["Model:Model::hip"]["Channel:Transform"]["Channel:T"]["Channel:Y"]["Key"]
+            zKey = d["Takes:"]["Take:19_15"]["Model:Model::hip"]["Channel:Transform"]["Channel:T"]["Channel:Z"]["Key"]
 
-        #Closing up file
+            #If Keys contain angle for desired time
+            if angleOfKeyAtTime(xKey,listOfTimes[i]) and angleOfKeyAtTime(yKey,listOfTimes[i]) and angleOfKeyAtTime(zKey,listOfTimes[i]):
+
+                #Append angles
+                keyFrame.append(float(angleOfKeyAtTime(xKey,listOfTimes[i])))
+                keyFrame.append(float(angleOfKeyAtTime(yKey,listOfTimes[i])))
+                keyFrame.append(float(angleOfKeyAtTime(zKey,listOfTimes[i])))
+
+            # append old rotation
+            else:
+                keyFrame.append(oldKeyframe[1])
+                keyFrame.append(oldKeyframe[2])
+                keyFrame.append(oldKeyframe[3])
+
+            #Append 1D and 4D rotations
+            for x in range(0,len(animated)):
+                if x > 1:
+
+                    #if angle is 4D
+                    if dimensions[x] == 4:
+                        xKey = d["Takes:"]["Take:19_15"][animated[x]]["Channel:Transform"]["Channel:R"]["Channel:X"]["Key"]
+                        yKey = d["Takes:"]["Take:19_15"][animated[x]]["Channel:Transform"]["Channel:R"]["Channel:Y"]["Key"]
+                        zKey = d["Takes:"]["Take:19_15"][animated[x]]["Channel:Transform"]["Channel:R"]["Channel:Z"]["Key"]
+
+                        if angleOfKeyAtTime(xKey,listOfTimes[i]) and angleOfKeyAtTime(yKey,listOfTimes[i]) and angleOfKeyAtTime(zKey,listOfTimes[i]):
+
+                            #Get angles
+                            X = float(angleOfKeyAtTime(xKey,listOfTimes[i]))
+                            Y = float(angleOfKeyAtTime(yKey,listOfTimes[i]))
+                            Z = float(angleOfKeyAtTime(zKey,listOfTimes[i]))
+
+                            #Calculate quaternion angle
+                            quat = euler_to_quaternion(math.radians(-Z), math.radians(-Y), math.radians(-X))
+
+                            #Append quaternion angle
+                            keyFrame.append(quat[0])
+                            keyFrame.append(quat[1])
+                            keyFrame.append(quat[2])
+                            keyFrame.append(quat[3])
+
+                        else:
+                            print(f"Missed rotation, Line:       {i + 5}")
+
+                            animIndex = indexOfAnimated(animated[x])
+
+                            for i in range(0,4):
+                                keyFrame.append(oldKeyframe[animIndex + i])
+
+                    #If angle is 1D (Knees and elbows)
+                    elif dimensions[x] == 1:
+
+                            #If Knees
+                            if animated[x] == "Model:Model::rShin" or animated[x] == "Model:Model::lShin":
+
+                                #if angle found, append
+                                xKey = d["Takes:"]["Take:19_15"][animated[x]]["Channel:Transform"]["Channel:R"]["Channel:X"]["Key"]
+                                if angleOfKeyAtTime(xKey,listOfTimes[i]):
+                                    X = math.radians(float(angleOfKeyAtTime(xKey,listOfTimes[i])))
+                                    keyFrame.append(X)
+
+                                #else append last angle
+                                else:
+                                    keyFrame.append(oldKeyframe[x])
+
+                            #If Elbows
+                            elif animated[x] == "Model:Model::rForeArm" or animated[x] == "Model:Model::lForeArm":
+
+                                #if angle found, append
+                                yKey = d["Takes:"]["Take:19_15"][animated[x]]["Channel:Transform"]["Channel:R"]["Channel:Y"]["Key"]
+                                if angleOfKeyAtTime(yKey,listOfTimes[i]):
+                                    Y = math.radians(float(angleOfKeyAtTime(xKey,listOfTimes[i])))
+                                    keyFrame.append(Y)
+
+                                #else append last angle
+                                else:
+                                    keyFrame.append(oldKeyframe[x])
+                    else:
+                        print(f"Error on rotations Loop {x}")
+
+
+
+
+
+
+            #Turn keyFrame into a recordable JSON String
+            keyFrameString = "["
+            keyFrameString += str(keyFrame[0])
+
+            for x in range(0,len(keyFrame)):
+                if x > 0:
+                    keyFrameString += ","
+                    keyFrameString += str(keyFrame[x])
+
+            #Put comma at end of all keyFrame lines but the last
+            keyFrameString += "]"
+            if i < len(listOfTimes) - 1:
+                keyFrameString += ","
+
+            print(f"{keyFrameString}", file=output)
+
+        #Close JSON object
         print(f"]", file=output)
         print(f"}}", file=output)
-
-       
-
-        # for i in range(0,len(Docs)):
-        #     print(f"DocWants: {Docs[i]}     dimensions: {dimensions[i]}     JSON: {animated[i]}")

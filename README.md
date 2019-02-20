@@ -1,10 +1,19 @@
 # FbxToMimic [Not Yet Working]
-Turns FBX Animation file into a DeepMimic motion file. DeepMimic motion files are used for training policies.
 
-[Link to DeepMimic project](https://github.com/xbpeng/DeepMimic)
+## Goal
+
+The [DeepMimic project](https://github.com/xbpeng/DeepMimic) currently offers no way to import custom reference motions.
+
+This project aims to transfer animation data from .FBX files into DeepMimic Motion files. Motion files can then be used to Train DeepMimic skills.
 
 
-## Plans
 
-- Convert FBX to JSON [Completed, See /Utils/ReadMy.md]
-- write program to convert JSON to DeepMimic Model file compatible JSON. [Completed  with FbxToMimic.py][Conversion incorrect]
+## Progress
+
+- FBX files (v6.1.0) are converted to fbx.JSON
+- fbx.JSON files are converted to DeepMimic Motion files
+
+
+## Need to complete
+
+- Fix Euler to quaternions angle conversion

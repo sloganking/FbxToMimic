@@ -19,3 +19,4 @@ This project aims to transfer animation data from .FBX files into DeepMimic Moti
 ## Need to complete
 
 - Fix Euler to quaternions angle conversion
+  - Currently causing incorrect animation conversion [Seen in progress gif above]

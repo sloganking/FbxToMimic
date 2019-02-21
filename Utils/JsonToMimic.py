@@ -202,18 +202,24 @@ for j in range(0,len(onlyfiles)):
                                         else:
                                             keyFrame.append(oldKeyframe[x])
 
-                                    #If Elbows
+                                    #If Right elbow
                                     elif animated[x] == "Model:Model::rForeArm" or animated[x] == "Model:Model::lForeArm":
 
                                         #if angle found, append
                                         yKey = d["Takes:"][f"Take:{onlyfiles[j][:-9]}"][animated[x]]["Channel:Transform"]["Channel:R"]["Channel:Y"]["Key"]
                                         if angleOfKeyAtTime(yKey,listOfTimes[i]):
                                             Y = math.radians(float(angleOfKeyAtTime(xKey,listOfTimes[i])))
+
+                                            #Invert angle if Right elbow
+                                            if animated[x] == "Model:Model::rForeArm":
+                                                Y = Y * -1
+                                            
                                             keyFrame.append(Y)
 
                                         #else append last angle
                                         else:
                                             keyFrame.append(oldKeyframe[x])
+                                    
                             else:
                                 print(f"Error on rotations Loop {x}")
 
@@ -239,8 +245,8 @@ for j in range(0,len(onlyfiles)):
 
             print(f"MimicMotion {onlyfiles[j]}.txt created")
 
-            # # Remove all files in "./Utils/Temp/"
-            # mypath = "./Utils/Temp/"
-            # onlyfiles = [f for f in listdir(mypath) if isfile(join(mypath, f))]
-            # for i in range(0,len(onlyfiles)):
-            #     os.remove(f"{mypath}{onlyfiles[i]}")
+            # Remove all files in "./Utils/Temp/"
+            mypath = "./Utils/Temp/"
+            onlyfiles = [f for f in listdir(mypath) if isfile(join(mypath, f))]
+            for i in range(0,len(onlyfiles)):
+                os.remove(f"{mypath}{onlyfiles[i]}")

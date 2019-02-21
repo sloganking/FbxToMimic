@@ -21,73 +21,103 @@ def getTabs(str):
         tabs = tabs + "\t"
     return tabs + "\t"
 
+
+
 lastDepth = 0    #initialize depth
 
-#with open("13_29.fbx") as input:
-with open("19_15.fbx") as input:
-    with open("FbxJson.json","w") as output:
+from os import listdir
+from os.path import isfile, join
+mypath = "./InputFbx"
+onlyfiles = [f for f in listdir(mypath) if isfile(join(mypath, f))]
 
-        content = input.readlines()
-        
-        #Start JSON object
-        print(f"{{", file=output)
+print(f"Files to Convert:       {onlyfiles}")
 
-        print(f"Content length: {len(content)}")
-        # Start of file conversion
-        for x in range(0,len(content)):
-            tokens = str.split(content[x])
-            tabDepth = getTabs(content[x])
-            strToPrint = ""
-            curToken = 0
-            stringLeft = ""
+for j in range(0,len(onlyfiles)):
+    print(f"Converting {onlyfiles[j]} to {onlyfiles[j]}.json...")
+    with open(f"./InputFbx/{onlyfiles[j]}") as input:
+        with open(f"./Utils/Temp/{onlyfiles[j]}.json","w") as output:
 
-            if len(tokens) > 0:
-                if tokens[0][:1] == ";":    # if first char of first token = ";"
-                    nonANumber = 1
+            content = input.readlines()
+            
+            #Start JSON object
+            print(f"{{", file=output)
+            print(f"Number of lines in FBX: {len(content)}")
 
-                elif content[x][ len(content[x]) - 2] == "{":   # if last char of line is "{"
-                    stringLeft = ""
-                    for i in range(curToken,len(tokens)):
-                        if tokens[i] != "{":
-                            stringLeft += tokens[i]
-                    stringLeft = stringLeft.replace("\"", "")
-                    strToPrint += f"\"{stringLeft}\": {{"
-                
-                elif tokens[0][ len(tokens[0]) - 1] == ':':     #elif first token is property
-                    
-                    # if len(tokens) < 2:
-                    #     strToPrint = "\"BadProperty\": \"none\""
+            # Start of file conversion
+            for x in range(0,len(content)):
+                tokens = str.split(content[x])
+                tabDepth = getTabs(content[x])
+                strToPrint = ""
+                curToken = 0
+                stringLeft = ""
 
-                    if tokens[0][:-1] == "CameraIndexName":
-                        strToPrint = "\"CameraIndexName\": \"bad property\""
-                    elif tokens[0][:-1] == "Shading":
-                        strToPrint = ""
-                    elif tokens[0][:-1] == "ReferenceTime":
-                        strToPrint = "\"ReferenceTime\": 590797937750,"
-                    elif tokens[0][:-1] == "Month":
-                        strToPrint = "\"Month\": \"bad property\""
-                        #add comma if next depth == curDepth && not already have comma
-                        if x < len(content) - 1:
-                            if depthOf(content[x]) == depthOf(content[x + 1]):
-                                if strToPrint[len(strToPrint) - 1] != ",":
-                                    strToPrint += ","
+                if len(tokens) > 0:
 
-                    elif tokens[0][:-1] == "Key":
-                        strToPrint = "\"Key\": ["
-                    elif tokens[0][:-1] == "Color":
-                        print(f"{tabDepth}],", file=output)
-                        strToPrint = "\"Color\": 0"
-                    else:
-                        #add property to front
-                        strToPrint += f"\"{tokens[0][:-1]}\": "
-                        curToken += 1
+                    # if first char of first token = ";"
+                    if tokens[0][:1] == ";":
+                        nonANumber = 1
+
+                    # if last char of line is "{"
+                    elif content[x][ len(content[x]) - 2] == "{":
                         stringLeft = ""
-                        for i in range(curToken,len(tokens)):       #
-                            stringLeft += tokens[i]
-                        if len(stringLeft.split(",")) > 1:
-                            strToPrint += stringLeft.split(",")[1]
+                        for i in range(curToken,len(tokens)):
+                            if tokens[i] != "{":
+                                stringLeft += tokens[i]
+                        stringLeft = stringLeft.replace("\"", "")
+                        strToPrint += f"\"{stringLeft}\": {{"
+
+                    # if last char of line is "}"
+                    elif content[x][ len(content[x]) - 2] == "}":
+                        strToPrint += f"}}"
+
+                        #add comma if next depth == curDepth && not already have comma
+                        if x < len(content) - 1:
+                            if depthOf(content[x]) == depthOf(content[x + 1]):
+                                if strToPrint[len(strToPrint) - 1] != ",":
+                                    strToPrint += ","
+                    
+                    #elif first token is property
+                    elif tokens[0][ len(tokens[0]) - 1] == ':':
+
+                        # Property is "Key"
+                        if tokens[0][:-1] == "Key":
+                            strToPrint = "\"Key\": ["
+
+                        # Property is "Color"
+                        elif tokens[0][:-1] == "Color":
+                            print(f"{tabDepth}],", file=output)
+                            strToPrint = "\"Color\": 0"
+                        
+                        # Property is "ReferenceTime"
+                        elif tokens[0][:-1] == "ReferenceTime":
+                            strToPrint = "\"ReferenceTime\": \"N/A\","
+
                         else:
-                            strToPrint += stringLeft.split(",")[0]
+                            #add property to front
+                            strToPrint += f"\"{tokens[0][:-1]}\": "
+                            curToken += 1
+                            stringLeft = ""
+
+                            # Combine rest of tokens into string
+                            for i in range(curToken,len(tokens)):
+                                stringLeft += tokens[i]
+                            stringLeft = stringLeft.replace("\"","\\\"")
+                            stringLeft = f"\"{stringLeft}\""
+                            strToPrint += stringLeft
+
+                            #add comma if next depth == curDepth && not already have comma
+                            if x < len(content) - 1:
+                                if depthOf(content[x]) == depthOf(content[x + 1]):
+                                    if strToPrint[len(strToPrint) - 1] != ",":
+                                        strToPrint += ","
+
+                    # no property on line
+                    else:
+                        for i in range(curToken,len(tokens)):
+                            stringLeft += tokens[i]
+                        stringLeft = stringLeft.replace("\"","\\\"")
+                        stringLeft = f"\"{stringLeft}\""
+                        strToPrint += stringLeft
 
                         #add comma if next depth == curDepth && not already have comma
                         if x < len(content) - 1:
@@ -95,39 +125,12 @@ with open("19_15.fbx") as input:
                                 if strToPrint[len(strToPrint) - 1] != ",":
                                     strToPrint += ","
 
-                else:
-                    for i in range(curToken,len(tokens)):
-                        stringLeft += tokens[i]
-                    if len(stringLeft.split(",")) > 1:
-                        strToPrint += stringLeft.split(",")[1]
-                    else:
-                        strToPrint += stringLeft.split(",")[0]
+                #print(strToPrint)
+                # If something to print
+                if strToPrint != "":
+                    strToPrint = f"{tabDepth}{strToPrint}"
+                    print(f"{strToPrint}", file=output)
 
-                    #add comma if next depth == curDepth && not already have comma
-                    if x < len(content) - 1:
-                        if depthOf(content[x]) == depthOf(content[x + 1]):
-                            if strToPrint[len(strToPrint) - 1] != ",":
-                                strToPrint += ","
-
-            #print(strToPrint)
-            # If something to print
-            if strToPrint != "":
-                strToPrint = f"{tabDepth}{strToPrint}"
-                print(f"{strToPrint}", file=output)
-
-        #End JSON object
-        print(f"}}", file=output)
-
-        print("Conversion completed...")
-
-#===============================================================================
-
-
-#if ;, print no line
-#elif the last char is "{"
-    #concatenate the entire line and make it a property name, 
-    # add "{ to the end of the line
-#elif first token is property
-    # create property name
-    # assign value (preference of second commad value)
-    # add comma if needed
+            #End JSON object
+            print(f"}}", file=output)
+            print("Conversion completed...")

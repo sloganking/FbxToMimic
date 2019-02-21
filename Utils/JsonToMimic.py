@@ -202,7 +202,7 @@ for j in range(0,len(onlyfiles)):
                                         else:
                                             keyFrame.append(oldKeyframe[x])
 
-                                    #If Right elbow
+                                    #If Elbow
                                     elif animated[x] == "Model:Model::rForeArm" or animated[x] == "Model:Model::lForeArm":
 
                                         #if angle found, append
@@ -210,7 +210,7 @@ for j in range(0,len(onlyfiles)):
                                         if angleOfKeyAtTime(yKey,listOfTimes[i]):
                                             Y = math.radians(float(angleOfKeyAtTime(xKey,listOfTimes[i])))
 
-                                            #Invert angle if Right elbow
+                                            #if Right elbow Invert angle 
                                             if animated[x] == "Model:Model::rForeArm":
                                                 Y = Y * -1
                                             

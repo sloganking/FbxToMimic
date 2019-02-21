@@ -208,11 +208,7 @@ for j in range(0,len(onlyfiles)):
                                         #if angle found, append
                                         yKey = d["Takes:"][f"Take:{onlyfiles[j][:-9]}"][animated[x]]["Channel:Transform"]["Channel:R"]["Channel:Y"]["Key"]
                                         if angleOfKeyAtTime(yKey,listOfTimes[i]):
-                                            Y = math.radians(float(angleOfKeyAtTime(xKey,listOfTimes[i])))
-
-                                            #if Right elbow Invert angle 
-                                            if animated[x] == "Model:Model::rForeArm":
-                                                Y = Y * -1
+                                            Y = -math.radians(float(angleOfKeyAtTime(yKey,listOfTimes[i])))
                                             
                                             keyFrame.append(Y)
 

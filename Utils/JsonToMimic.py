@@ -193,9 +193,11 @@ for j in range(0,len(onlyfiles)):
                                     if animated[x] == "Model:Model::rShin" or animated[x] == "Model:Model::lShin":
 
                                         #if angle found, append
-                                        xKey = d["Takes:"][f"Take:{onlyfiles[j][:-9]}"][animated[x]]["Channel:Transform"]["Channel:R"]["Channel:X"]["Key"]
+                                        #Should be channel X (Unity knee bend) but takes channel Y for some reason
+                                        #Perhaps unity reads Y as it's X
+                                        xKey = d["Takes:"][f"Take:{onlyfiles[j][:-9]}"][animated[x]]["Channel:Transform"]["Channel:R"]["Channel:Y"]["Key"]
                                         if angleOfKeyAtTime(xKey,listOfTimes[i]):
-                                            X = math.radians(float(angleOfKeyAtTime(xKey,listOfTimes[i])))
+                                            X = -math.radians(float(angleOfKeyAtTime(xKey,listOfTimes[i])))
                                             keyFrame.append(X)
 
                                         #else append last angle

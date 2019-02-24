@@ -6,6 +6,8 @@ from os import listdir
 from os.path import isfile, join
 
 # Function declarations
+
+#Seems to be roll yaw pitch
 def euler_to_quaternion(heading, attitude, bank):
     c1 = np.cos(heading/2)
     s1 = np.sin(heading/2)
@@ -119,6 +121,7 @@ for j in range(0,len(onlyfiles)):
             #For every unique time, create a keyFrame
             keyFrame = []
             for i in range(0,len(listOfTimes)):
+                print(f"Keyframe: {i}/{len(listOfTimes)}", end="\r")
                 oldKeyframe = keyFrame
                 keyFrame = []
 
@@ -130,7 +133,7 @@ for j in range(0,len(onlyfiles)):
 
 
                 if posLocked == False:
-                    # #Append Root position
+                    #Append Root position
                     xKey = d["Takes:"][f"Take:{onlyfiles[j][:-9]}"]["Model:Model::hip"]["Channel:Transform"]["Channel:T"]["Channel:X"]["Key"]
                     yKey = d["Takes:"][f"Take:{onlyfiles[j][:-9]}"]["Model:Model::hip"]["Channel:Transform"]["Channel:T"]["Channel:Y"]["Key"]
                     zKey = d["Takes:"][f"Take:{onlyfiles[j][:-9]}"]["Model:Model::hip"]["Channel:Transform"]["Channel:T"]["Channel:Z"]["Key"]
@@ -180,15 +183,23 @@ for j in range(0,len(onlyfiles)):
                                     Y = float(angleOfKeyAtTime(yKey,listOfTimes[i]))
                                     Z = float(angleOfKeyAtTime(zKey,listOfTimes[i]))
 
-                                    #Print XYZ of certain joint and Frame
-                                    if i == 78 and animated[x] == "Model:Model::rThigh":
-                                        print("Thigh XYZ: at frame 78")
-                                        print(f"X: {X}")
-                                        print(f"Y: {Y}")
-                                        print(f"Z: {Z}")
+                                    # #Get angles
+                                    # X = 0
+                                    # Y = 0
+                                    # Z = float(angleOfKeyAtTime(yKey,listOfTimes[i]))
+
+                                    # pitch = -X
+                                    # yaw = -Y
+                                    # roll = -Z
+
+                                    pitch = Y -45
+                                    yaw = Z
+                                    roll = X
 
                                     #Calculate quaternion angle
-                                    quat = euler_to_quaternion(math.radians(-Z), math.radians(-Y), math.radians(-X))
+                                    quat = euler_to_quaternion(math.radians(yaw), math.radians(pitch), math.radians(roll))
+
+                                    # quat = euler_to_quaternion(math.radians(Z), math.radians(Y), math.radians(X))
 
                                     #Append quaternion angle
                                     keyFrame.append(quat[0])
@@ -213,7 +224,7 @@ for j in range(0,len(onlyfiles)):
                                         #Perhaps unity reads Y as it's X
                                         xKey = d["Takes:"][f"Take:{onlyfiles[j][:-9]}"][animated[x]]["Channel:Transform"]["Channel:R"]["Channel:Y"]["Key"]
                                         if angleOfKeyAtTime(xKey,listOfTimes[i]):
-                                            X = -math.radians(float(angleOfKeyAtTime(xKey,listOfTimes[i])))
+                                            X = math.radians(float(angleOfKeyAtTime(xKey,listOfTimes[i])))
                                             keyFrame.append(X)
 
                                         #else append last angle
@@ -259,8 +270,8 @@ for j in range(0,len(onlyfiles)):
 
             print(f"MimicMotion {onlyfiles[j]}.txt created")
 
-            # Remove all files in "./Utils/Temp/"
-            mypath = "./Utils/Temp/"
-            onlyfiles = [f for f in listdir(mypath) if isfile(join(mypath, f))]
-            for i in range(0,len(onlyfiles)):
-                os.remove(f"{mypath}{onlyfiles[i]}")
+# Remove all files in "./Utils/Temp/"
+mypath = "./Utils/Temp/"
+onlyfiles = [f for f in listdir(mypath) if isfile(join(mypath, f))]
+for i in range(0,len(onlyfiles)):
+    os.remove(f"{mypath}{onlyfiles[i]}")

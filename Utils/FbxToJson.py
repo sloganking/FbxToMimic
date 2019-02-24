@@ -2,6 +2,9 @@ import numpy as np
 import math
 import json
 import re
+import os
+from os import listdir
+from os.path import isfile, join
 
 def isnumber(x):
     return re.match("-?[0-9]+([.][0-9]+)?$", x) is not None
@@ -21,6 +24,11 @@ def getTabs(str):
         tabs = tabs + "\t"
     return tabs + "\t"
 
+# Remove all files in "./Utils/Temp/"
+mypath = "./Utils/Temp/"
+onlyfiles = [f for f in listdir(mypath) if isfile(join(mypath, f))]
+for i in range(0,len(onlyfiles)):
+    os.remove(f"{mypath}{onlyfiles[i]}")
 
 
 lastDepth = 0    #initialize depth
@@ -30,10 +38,10 @@ from os.path import isfile, join
 mypath = "./InputFbx"
 onlyfiles = [f for f in listdir(mypath) if isfile(join(mypath, f))]
 
-print(f"Files to Convert:       {onlyfiles}")
+print(f"Files to Convert: {onlyfiles}")
 
 for j in range(0,len(onlyfiles)):
-    print(f"Converting {onlyfiles[j]} to {onlyfiles[j]}.json...")
+    print(f"Files Converted to JSON: {j}/{len(onlyfiles)}", end="\r")
     with open(f"./InputFbx/{onlyfiles[j]}") as input:
         with open(f"./Utils/Temp/{onlyfiles[j]}.json","w") as output:
 
@@ -41,7 +49,6 @@ for j in range(0,len(onlyfiles)):
             
             #Start JSON object
             print(f"{{", file=output)
-            print(f"Number of lines in FBX: {len(content)}")
 
             # Start of file conversion
             for x in range(0,len(content)):
@@ -133,4 +140,3 @@ for j in range(0,len(onlyfiles)):
 
             #End JSON object
             print(f"}}", file=output)
-            print("Conversion completed...")

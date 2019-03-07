@@ -14,9 +14,3 @@ This project aims to transfer animation data from .FBX files into DeepMimic Moti
 - fbx.JSON files are converted to DeepMimic Motion files
 
 ![FbxToMimic_Progress](./Assets/FbxToMimic_Progress.gif)
-
-
-## Need to complete
-
-- Fix Euler to quaternions angle conversion
-  - Currently causing incorrect animation conversion [Seen in progress gif above]

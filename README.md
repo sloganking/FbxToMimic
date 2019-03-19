@@ -17,3 +17,11 @@ This project aims to transfer animation data from .FBX files into DeepMimic Moti
 - fbx.JSON files are converted to DeepMimic Motion files
 
 ![FbxToMimic_Progress](./Assets/FbxToMimic_Progress.gif)
+
+## Running the project
+
+```Bash
+python FbxToMimic.py
+```
+
+Will convert all .fbx files located in ./InputFbx/ into Mimic Motion files, located in ./OutputMimic/

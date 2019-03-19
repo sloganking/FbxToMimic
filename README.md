@@ -1,5 +1,8 @@
 # FbxToMimic [Not Yet Working]
 
+## Notice
+Documentation quality needs to be increased for easier group work
+
 ## Goal
 
 The [DeepMimic project](https://github.com/xbpeng/DeepMimic) currently offers no way to import custom reference motions.

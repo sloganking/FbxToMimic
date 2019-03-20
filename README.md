@@ -20,7 +20,7 @@ This project aims to transfer animation data from .FBX files into DeepMimic Moti
 
 ## Project requirements
 
-.fbx the euler rotation data for animations, must be formatted as shown
+The euler rotation data for animations inside .fbx files must be formatted as shown
 
 ![Correct Format](https://i.imgur.com/WcOOPNS.png)
 

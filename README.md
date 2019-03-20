@@ -25,7 +25,7 @@ This means the euler rotation data for animations inside .fbx files must be form
 
 
 If your files are not formatted as shown above, they can be fixed with [Blender](https://www.blender.org/)
-### fixing your .fbx files
+### Fixing your .fbx files
 
 - Import your file into Blender
 - Export as .fbx

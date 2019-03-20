@@ -30,7 +30,7 @@ If your files are not formatted as shown above, they can be fixed with [Blender]
 - Import your file into Blender
 - Export as .fbx
 
-![export](https://i.imgur.com/4EdWW0u.png)
+![export](https://i.imgur.com/DmCfaoh.png)
 
 - In the bottom left, make sure you export as FBX 6.1 ASCII
 

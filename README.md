@@ -18,6 +18,14 @@ This project aims to transfer animation data from .FBX files into DeepMimic Moti
 
 ![FbxToMimic_Progress](./Assets/FbxToMimic_Progress.gif)
 
+## Project requirements
+
+.fbx the euler rotation data for animations, must be formatted as shown
+
+![Correct Format](https://i.imgur.com/WcOOPNS.png)
+
+JsonToMimic.py is not currently able to work with rotation data unless there is a return character after every ",L,"
+
 ## Running the project
 
 ```Bash

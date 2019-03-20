@@ -131,9 +131,8 @@ for j in range(0,len(onlyfiles)):
                 else:
                     keyFrame.append((int(listOfTimes[i]) - int(listOfTimes[i-1])) * 0.00000000002)
 
-
+                #Append Root position
                 if posLocked == False:
-                    #Append Root position
                     xKey = d["Takes:"][f"Take:{onlyfiles[j][:-9]}"]["Model:Model::hip"]["Channel:Transform"]["Channel:T"]["Channel:X"]["Key"]
                     yKey = d["Takes:"][f"Take:{onlyfiles[j][:-9]}"]["Model:Model::hip"]["Channel:Transform"]["Channel:T"]["Channel:Y"]["Key"]
                     zKey = d["Takes:"][f"Take:{onlyfiles[j][:-9]}"]["Model:Model::hip"]["Channel:Transform"]["Channel:T"]["Channel:Z"]["Key"]
@@ -176,6 +175,7 @@ for j in range(0,len(onlyfiles)):
                                 yKey = d["Takes:"][f"Take:{onlyfiles[j][:-9]}"][animated[x]]["Channel:Transform"]["Channel:R"]["Channel:Y"]["Key"]
                                 zKey = d["Takes:"][f"Take:{onlyfiles[j][:-9]}"][animated[x]]["Channel:Transform"]["Channel:R"]["Channel:Z"]["Key"]
 
+                                #If .fbx contains joint keyframe data for given time
                                 if angleOfKeyAtTime(xKey,listOfTimes[i]) and angleOfKeyAtTime(yKey,listOfTimes[i]) and angleOfKeyAtTime(zKey,listOfTimes[i]):
 
                                     #Get angles
@@ -184,17 +184,26 @@ for j in range(0,len(onlyfiles)):
                                     Z = float(angleOfKeyAtTime(zKey,listOfTimes[i]))
 
                                     # #Get angles
-                                    # X = 0
-                                    # Y = 0
-                                    # Z = float(angleOfKeyAtTime(yKey,listOfTimes[i]))
-
                                     # pitch = -X
                                     # yaw = -Y
                                     # roll = -Z
 
-                                    pitch = Y -45
-                                    yaw = Z
-                                    roll = X
+                                    if animated[x] == "Model:Model::rShldr":
+                                        pitch = Y
+                                        yaw = X
+                                        roll = Z - 83
+                                    elif animated[x] == "Model:Model::lShldr":
+                                        pitch = Y
+                                        yaw = X
+                                        roll = Z + 83
+                                    elif animated[x] == "Model:Model::rThigh" or animated[x] == "Model:Model::lThigh":
+                                        pitch = Y - 55
+                                        yaw = X
+                                        roll = Z
+                                    else:
+                                        pitch = Y
+                                        yaw = X
+                                        roll = Z
 
                                     #Calculate quaternion angle
                                     quat = euler_to_quaternion(math.radians(yaw), math.radians(pitch), math.radians(roll))
@@ -244,7 +253,9 @@ for j in range(0,len(onlyfiles)):
                                         #else append last angle
                                         else:
                                             keyFrame.append(oldKeyframe[x])
-                                    
+                                        
+                                    else:
+                                         print(f"Error 1D rotation but type not specified")
                             else:
                                 print(f"Error on rotations Loop {x}")
 

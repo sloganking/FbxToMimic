@@ -25,14 +25,14 @@ This means the euler rotation data for animations inside .fbx files must be form
 
 
 If your files are not formatted as shown above, they can be fixed with [Blender](https://www.blender.org/)
-### Fixing your .fbx files
+### Fixing your .fbx files with Blender
 
 - Import your file into Blender
 - Export as .fbx
 
 ![export](https://i.imgur.com/DmCfaoh.png)
 
-- In the bottom left, make sure you export as FBX 6.1 ASCII
+- In the bottom left, make sure you export as "FBX 6.1 ASCII"
 
 ![6.1](https://i.imgur.com/DnOk7Oh.png)
 

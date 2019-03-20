@@ -16,18 +16,23 @@ The [DeepMimic project](https://github.com/xbpeng/DeepMimic) currently offers no
 ![FbxToMimic_Progress](./Assets/FbxToMimic_Progress.gif)
 ![ChickenMimic](./Assets/ChickenMimic.gif)
 
-## Project requirements
+## Prepairing your .fbx files
 
 JsonToMimic.py is not currently able to work with rotation data unless there is a return character after every ",L,".
 This means the euler rotation data for animations inside .fbx files must be formatted as shown.
 
 ![Correct Format](https://i.imgur.com/WcOOPNS.png)
 
-Export as .fbx
+
+If your files are not formatted as shown above, they can be fixed with [Blender](https://www.blender.org/)
+### fixing your .fbx files
+
+- Import your file into Blender
+- Export as .fbx
 
 ![export](https://i.imgur.com/4EdWW0u.png)
 
-In the bottom left, make sure you export as FBX 6.1 ASCII
+- In the bottom left, make sure you export as FBX 6.1 ASCII
 
 ![6.1](https://i.imgur.com/DnOk7Oh.png)
 

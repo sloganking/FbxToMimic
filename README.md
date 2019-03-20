@@ -3,6 +3,8 @@
 ## Notice
 Documentation quality needs to be increased for easier group work
 
+This project is being developed in Ubuntu 18.04.2 LTS
+
 ## Goal
 
 The [DeepMimic project](https://github.com/xbpeng/DeepMimic) currently offers no way to import custom reference motions.

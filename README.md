@@ -1,9 +1,8 @@
 # FbxToMimic [Not Yet Working]
 
 ## Notice
-Documentation quality needs to be increased for easier group work
-
-This project is being developed in Ubuntu 18.04.2 LTS
+- Documentation quality needs to be increased for easier group work
+- This project is being developed in Ubuntu 18.04.2 LTS
 
 ## Goal
 

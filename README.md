@@ -17,8 +17,8 @@ The [DeepMimic project](https://github.com/xbpeng/DeepMimic) currently offers no
 
 ## Project requirements
 
-Because JsonToMimic.py is not currently able to work with rotation data unless there is a return character after every ",L,",
-the euler rotation data for animations inside .fbx files must be formatted as shown.
+JsonToMimic.py is not currently able to work with rotation data unless there is a return character after every ",L,".
+This means the euler rotation data for animations inside .fbx files must be formatted as shown.
 
 ![Correct Format](https://i.imgur.com/WcOOPNS.png)
 

@@ -23,6 +23,14 @@ This means the euler rotation data for animations inside .fbx files must be form
 
 ![Correct Format](https://i.imgur.com/WcOOPNS.png)
 
+Export as .fbx
+
+![export](https://i.imgur.com/4EdWW0u.png)
+
+In the bottom left, make sure you export as FBX 6.1 ASCII
+
+![6.1](https://i.imgur.com/DnOk7Oh.png)
+
 ## Running the project
 
 ```Bash

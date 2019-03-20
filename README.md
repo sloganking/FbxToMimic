@@ -13,7 +13,7 @@ This project aims to transfer animation data from .FBX files into DeepMimic Moti
 
 ## Progress
 
-- FBX files (v6.1.0) are converted to fbx.JSON
+- FBX files (v6.1.0)(ASCII) are converted to fbx.JSON
 - fbx.JSON files are converted to DeepMimic Motion files
 
 ![FbxToMimic_Progress](./Assets/FbxToMimic_Progress.gif)

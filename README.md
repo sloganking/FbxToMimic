@@ -14,6 +14,7 @@ The [DeepMimic project](https://github.com/xbpeng/DeepMimic) currently offers no
 - fbx.JSON files are converted to DeepMimic Motion files
 
 ![FbxToMimic_Progress](./Assets/FbxToMimic_Progress.gif)
+![ChickenMimic](./Assets/ChickenMimic.gif)
 
 ## Project requirements
 

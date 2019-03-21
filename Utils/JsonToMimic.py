@@ -189,21 +189,39 @@ for j in range(0,len(onlyfiles)):
                                     # roll = -Z
 
                                     if animated[x] == "Model:Model::rShldr":
-                                        pitch = Y
+                                        pitch = Y - 20
                                         yaw = X
                                         roll = Z - 83
                                     elif animated[x] == "Model:Model::lShldr":
                                         pitch = Y
-                                        yaw = X
+                                        yaw = X 
                                         roll = Z + 83
                                     elif animated[x] == "Model:Model::rThigh" or animated[x] == "Model:Model::lThigh":
                                         pitch = Y - 55
                                         yaw = X
                                         roll = Z
+                                    elif animated[x] == "Model:Model::rFoot":
+                                        pitch = Y - 70
+                                        yaw = X + 35
+                                        roll = Z + 45
+                                    elif animated[x] == "Model:Model::lFoot":
+                                        pitch = Y - 70
+                                        yaw = X - 35
+                                        roll = Z - 45
                                     else:
                                         pitch = Y
                                         yaw = X
                                         roll = Z
+
+                                    #Zero out things for testing
+                                    #pitch = 0
+                                    #yaw = 0
+                                    #roll = 0
+
+                                    #Invert needed things
+                                    pitch = -pitch
+                                    yaw = -yaw
+                                    roll = roll 
 
                                     #Calculate quaternion angle
                                     quat = euler_to_quaternion(math.radians(yaw), math.radians(pitch), math.radians(roll))

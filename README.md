@@ -13,13 +13,15 @@ The [DeepMimic project](https://github.com/xbpeng/DeepMimic) currently offers no
 
 - User ensures .fbx files are in desired format
 	- "FBX 6.1 ASCII", exported from blender
-- User puts desired .fbx files in [./InputFbx/](InputFbx)
+- User puts desired .fbx files in [/InputFbx/](InputFbx)
 - User manually creates humanoid rig from .fbx bone names
 - User calls [FbxToMimic.py](./FbxToMimic.py) to start conversion
-	- All files in "./OutputMimic" are removed
-- [FbxToJson.py](./Utils/FbxToJson.py) converts .fbx files (v6.1.0)(ASCII) into fbx.json in "/Utils/Temp/"
-	- All old files in "./Utils/Temp/" are removed
-- JsonToMimic.py converts fbx.json files to DeepMimic Motion files. Saved in /OutputMimic/
+	- All files in "/OutputMimic" are removed
+- [FbxToJson.py](./Utils/FbxToJson.py) 
+	- removes all files in "/Utils/Temp/"
+	- converts .fbx files (v6.1.0)(ASCII) in "/InputFbx/" into fbx.json in "/Utils/Temp/"
+- JsonToMimic.py
+	- converts fbx.json files in "/Utils/Temp/" to DeepMimic Motion files in /OutputMimic/
 
 ## Prepairing your .fbx files
 
@@ -43,7 +45,7 @@ If your files are not formatted as shown above, they can be fixed with [Blender]
 
 ## Creating a humanoid rig
 
-Currently joints in .fbx files have to be manually assigned by name to the corresponding joints in the Mimic Motion humanoid rig. Right now this is done by putting the json property names of your bones into the "animated" list, located in [./Utils/JsonToMimic.py](./Utils/JsonToMimic.py) in order with the Mimic joints listed below.
+Currently joints in .fbx files have to be manually assigned by name to the corresponding joints in the Mimic Motion humanoid rig. Right now this is done by putting the json property names of your bones into the "animated" list, located in [/Utils/JsonToMimic.py](./Utils/JsonToMimic.py) in order with the Mimic joints listed below.
 
 ```
 [
@@ -75,4 +77,4 @@ The current method of creating a humanoid rig just described is not intuative an
 python FbxToMimic.py
 ```
 
-Will convert all .fbx files located in ./InputFbx/ into Mimic Motion files, located in ./OutputMimic/
+Will convert all .fbx files located in /InputFbx/ into Mimic Motion files, located in /OutputMimic/

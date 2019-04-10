@@ -8,10 +8,14 @@
 
 The [DeepMimic project](https://github.com/xbpeng/DeepMimic) currently offers no way to import custom reference motions. This is shown in [DeepMimic issue #23](https://github.com/xbpeng/DeepMimic/issues/23). This project aims to transfer animation data from .FBX files into DeepMimic Motion files. Motion files can then be used to Train DeepMimic skills.
 
-## Progress
+## Process
 
-- FBX files (v6.1.0)(ASCII) are converted to fbx.JSON
-- fbx.JSON files are converted to DeepMimic Motion files
+- User calls [FbxToMimic.py](./FbxToMimic.py) to start program
+- [FbxToJson.py](./Utils/FbxToJson.py) converts .fbx files (v6.1.0)(ASCII) into fbx.JSON in "/Utils/Temp/"
+- JsonToMimic.py converts fbx.JSON to DeepMimic Motion files. Saved in /OutputMimic/
+
+
+## Progress
 
 ![FbxToMimic_Progress](./Assets/FbxToMimic_Progress.gif)
 ![ChickenMimic](./Assets/ChickenMimic.gif)

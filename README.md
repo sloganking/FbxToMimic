@@ -11,8 +11,12 @@ The [DeepMimic project](https://github.com/xbpeng/DeepMimic) currently offers no
 
 ## Process
 
-- User calls [FbxToMimic.py](./FbxToMimic.py) to start program
+- User puts desired .fbx files in [./InputFbx/](InputFbx)
+- User manually creates humanoid rig from .fbx bone names.
+- User calls [FbxToMimic.py](./FbxToMimic.py) to start conversion.
+	- All files in "./OutputMimic" are removed
 - [FbxToJson.py](./Utils/FbxToJson.py) converts .fbx files (v6.1.0)(ASCII) into fbx.JSON in "/Utils/Temp/"
+	- All old files in "./Utils/Temp/" are removed
 - JsonToMimic.py converts fbx.JSON to DeepMimic Motion files. Saved in /OutputMimic/
 
 ## Creating a humanoid rig

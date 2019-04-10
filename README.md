@@ -1,4 +1,4 @@
-# FbxToMimic [Not Yet Working]
+# FbxToMimic
 
 ## Goal
 

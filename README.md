@@ -13,7 +13,7 @@ The [DeepMimic project](https://github.com/xbpeng/DeepMimic) currently offers no
 
 - User ensures .fbx files are in desired format
 	- "FBX 6.1 ASCII", exported from blender
-- User puts desired .fbx files in [/InputFbx/](InputFbx)
+- User puts desired .fbx files in /InputFbx/
 - User manually creates humanoid rig from .fbx bone names
 - User calls [FbxToMimic.py](./FbxToMimic.py) to start conversion
 	- All files in "/OutputMimic" are removed

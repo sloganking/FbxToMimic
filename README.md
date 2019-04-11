@@ -20,7 +20,7 @@ The [DeepMimic project](https://github.com/xbpeng/DeepMimic) currently offers no
 - [FbxToJson.py](./Utils/FbxToJson.py) 
 	- removes all files in "/Utils/Temp/"
 	- converts .fbx files (v6.1.0)(ASCII) in "/InputFbx/" into fbx.json in "/Utils/Temp/"
-- JsonToMimic.py
+- [JsonToMimic.py](./Utils/JsonToMimic.py)
 	- converts fbx.json files in "/Utils/Temp/" to DeepMimic Motion files in /OutputMimic/
 
 ## Prepairing your .fbx files

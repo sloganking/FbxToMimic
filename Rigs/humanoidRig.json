@@ -1,0 +1,15 @@
+{
+  "hip": "hip",
+  "chest": "chest",
+  "neck": "neck",
+  "right hip": "rThigh",
+  "right knee": "rShin",
+  "right ankle": "rFoot",
+  "right shoulder": "rShldr",
+  "right elbow": "rForeArm",
+  "left hip": "lThigh",
+  "left knee": "lShin",
+  "left ankle": "lFoot",
+  "left shoulder": "lShldr",
+  "left elbow": "lForeArm"
+}

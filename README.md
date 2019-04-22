@@ -9,12 +9,6 @@ The [DeepMimic project](https://github.com/xbpeng/DeepMimic) currently offers no
 ![FbxToMimic_Progress](./Assets/FbxToMimic_Progress.gif)
 ![ChickenMimic](./Assets/ChickenMimic.gif)
 
-## Dependencies
-
-Python `sudo apt install python`
-
-numpy `pip install numpy`
-
 ## Process
 
 - User ensures .fbx files are in desired format

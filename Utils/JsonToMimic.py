@@ -305,4 +305,4 @@ for j in range(0,len(onlyfiles)):
 
             print(f"MimicMotion {onlyfiles[j]}.txt created")
 
-removeAllFilesInDirectory("./Utils/Temp/")
+#removeAllFilesInDirectory("./Utils/Temp/")

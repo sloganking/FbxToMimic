@@ -8,7 +8,7 @@ def removeAllFilesInDirectory(directory):
     for i in range(0,len(onlyfiles)):
         os.remove(f"{directory}{onlyfiles[i]}")
 
-removeAllFilesIn("./OutputMimic/")
+removeAllFilesInDirectory("./OutputMimic/")
 
 os.system("python ./Utils/FbxToJson.py")
 os.system("python ./Utils/JsonToMimic.py")

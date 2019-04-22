@@ -90,6 +90,12 @@ def indexOfAnimated(anim):
     
     return index
 
+# Remove all files in given directory
+def removeAllFilesInDirectory(directory):
+    onlyfiles = [f for f in listdir(directory) if isfile(join(directory, f))]
+    for i in range(0,len(onlyfiles)):
+        os.remove(f"{directory}{onlyfiles[i]}")
+
 print("Converting JSON to MimicMotion file")
 
 # Initilize variables
@@ -299,8 +305,4 @@ for j in range(0,len(onlyfiles)):
 
             print(f"MimicMotion {onlyfiles[j]}.txt created")
 
-# # Remove all files in "./Utils/Temp/"
-# mypath = "./Utils/Temp/"
-# onlyfiles = [f for f in listdir(mypath) if isfile(join(mypath, f))]
-# for i in range(0,len(onlyfiles)):
-#     os.remove(f"{mypath}{onlyfiles[i]}")
+removeAllFilesInDirectory("./Utils/Temp/")

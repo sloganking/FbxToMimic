@@ -1,3 +1,5 @@
+#Imports
+#===========================================================================
 import numpy as np
 import math
 import json
@@ -6,6 +8,7 @@ from os import listdir
 from os.path import isfile, join
 
 # Function declarations
+#===========================================================================
 
 #Seems to be roll yaw pitch
 def euler_to_quaternion(heading, attitude, bank):
@@ -95,6 +98,9 @@ def removeAllFilesInDirectory(directory):
     onlyfiles = [f for f in listdir(directory) if isfile(join(directory, f))]
     for i in range(0,len(onlyfiles)):
         os.remove(f"{directory}{onlyfiles[i]}")
+
+#Start of main program
+#===========================================================================
 
 print("Converting JSON to MimicMotion file")
 

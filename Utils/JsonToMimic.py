@@ -86,7 +86,9 @@ def indexOfAnimated(anim):
     index = 0
 
     for i in range(0,len(animated)):
-        if animated[i] != anim:
+        if i < 2:   #skip non rotations
+            index = index + 1
+        elif fbxBoneName(deepMimicHumanoidJoints[i]) != anim:
             index = index + 1
         else:
             break
@@ -99,15 +101,28 @@ def removeAllFilesInDirectory(directory):
     for i in range(0,len(onlyfiles)):
         os.remove(f"{directory}{onlyfiles[i]}")
 
+def fbxBoneName(mimicBone):
+    return humanoidRig[f"{mimicBone}"]
+
 #Start of main program
 #===========================================================================
+
+#get json of humanoidRig
+with open(f"./Rigs/humanoidRig.json") as json_data:
+    humanoidRig = json.load(json_data)
 
 print("Converting JSON to MimicMotion file")
 
 # Initilize variables
 animated = ["Seconds", "Model:Model::hip", "Model:Model::hip", "Model:Model::chest","Model:Model::neck","Model:Model::rThigh","Model:Model::rShin","Model:Model::rFoot","Model:Model::rShldr","Model:Model::rForeArm","Model:Model::lThigh","Model:Model::lShin","Model:Model::lFoot","Model:Model::lShldr","Model:Model::lForeArm"]
+# Order is important
+deepMimicHumanoidJoints = ["seconds", "hipPosition", "hip", "chest", "neck", "right hip", "right knee", "right ankle", "right shoulder", "right elbow", "left hip", "left knee", "left ankle", "left shoulder", "left elbow"]
 dimensions = [1,3,4,4,4,4,1,4,4,1,4,1,4,4,1]
 posLocked = True
+
+
+string1 = "right knee"
+print(f"Fbx right shen bone:       {fbxBoneName(string1)}")
 
 mypath = "./Utils/Temp/"
 onlyfiles = [f for f in listdir(mypath) if isfile(join(mypath, f))]
@@ -138,16 +153,16 @@ for j in range(0,len(onlyfiles)):
                 keyFrame = []
 
                 #Append Time
-                if i == 0:
+                if i == 0:      #If first time, use filler
                     keyFrame.append(int(listOfTimes[i]) * 0.00000000002)
-                else:
+                else:       # else calculate time based on previous times
                     keyFrame.append((int(listOfTimes[i]) - int(listOfTimes[i-1])) * 0.00000000002)
 
                 #Append Root position
                 if posLocked == False:
-                    xKey = d["Takes:"][f"Take:{onlyfiles[j][:-9]}"]["Model:Model::hip"]["Channel:Transform"]["Channel:T"]["Channel:X"]["Key"]
-                    yKey = d["Takes:"][f"Take:{onlyfiles[j][:-9]}"]["Model:Model::hip"]["Channel:Transform"]["Channel:T"]["Channel:Y"]["Key"]
-                    zKey = d["Takes:"][f"Take:{onlyfiles[j][:-9]}"]["Model:Model::hip"]["Channel:Transform"]["Channel:T"]["Channel:Z"]["Key"]
+                    xKey = d["Takes:"][f"Take:{onlyfiles[j][:-9]}"][f"Model:Model::{fbxBoneName(deepMimicHumanoidJoints[2])}"]["Channel:Transform"]["Channel:T"]["Channel:X"]["Key"]
+                    yKey = d["Takes:"][f"Take:{onlyfiles[j][:-9]}"][f"Model:Model::{fbxBoneName(deepMimicHumanoidJoints[2])}"]["Channel:Transform"]["Channel:T"]["Channel:Y"]["Key"]
+                    zKey = d["Takes:"][f"Take:{onlyfiles[j][:-9]}"][f"Model:Model::{fbxBoneName(deepMimicHumanoidJoints[2])}"]["Channel:Transform"]["Channel:T"]["Channel:Z"]["Key"]
 
                     #If Keys contain angle for desired time
                     if angleOfKeyAtTime(xKey,listOfTimes[i]) and angleOfKeyAtTime(yKey,listOfTimes[i]) and angleOfKeyAtTime(zKey,listOfTimes[i]):
@@ -170,8 +185,8 @@ for j in range(0,len(onlyfiles)):
                     keyFrame.append(0)
 
                 #Append 1D and 4D rotations
-                for x in range(0,len(animated)):
-                    if x > 1:
+                for x in range(0,len(deepMimicHumanoidJoints)):
+                    if x > 1:   #skip seconds
 
                         #If posLocked, lock root rotation
                         if posLocked and x == 2:
@@ -183,9 +198,9 @@ for j in range(0,len(onlyfiles)):
                         else:
                             #if angle is 4D
                             if dimensions[x] == 4:
-                                xKey = d["Takes:"][f"Take:{onlyfiles[j][:-9]}"][animated[x]]["Channel:Transform"]["Channel:R"]["Channel:X"]["Key"]
-                                yKey = d["Takes:"][f"Take:{onlyfiles[j][:-9]}"][animated[x]]["Channel:Transform"]["Channel:R"]["Channel:Y"]["Key"]
-                                zKey = d["Takes:"][f"Take:{onlyfiles[j][:-9]}"][animated[x]]["Channel:Transform"]["Channel:R"]["Channel:Z"]["Key"]
+                                xKey = d["Takes:"][f"Take:{onlyfiles[j][:-9]}"][f"Model:Model::{fbxBoneName(deepMimicHumanoidJoints[x])}"]["Channel:Transform"]["Channel:R"]["Channel:X"]["Key"]
+                                yKey = d["Takes:"][f"Take:{onlyfiles[j][:-9]}"][f"Model:Model::{fbxBoneName(deepMimicHumanoidJoints[x])}"]["Channel:Transform"]["Channel:R"]["Channel:Y"]["Key"]
+                                zKey = d["Takes:"][f"Take:{onlyfiles[j][:-9]}"][f"Model:Model::{fbxBoneName(deepMimicHumanoidJoints[x])}"]["Channel:Transform"]["Channel:R"]["Channel:Z"]["Key"]
 
                                 #If .fbx contains joint keyframe data for given time
                                 if angleOfKeyAtTime(xKey,listOfTimes[i]) and angleOfKeyAtTime(yKey,listOfTimes[i]) and angleOfKeyAtTime(zKey,listOfTimes[i]):
@@ -200,23 +215,23 @@ for j in range(0,len(onlyfiles)):
                                     # yaw = -Y
                                     # roll = -Z
 
-                                    if animated[x] == "Model:Model::rShldr":
+                                    if fbxBoneName(deepMimicHumanoidJoints[x]) == fbxBoneName('right shoulder'):
                                         pitch = Y - 20
                                         yaw = X
                                         roll = Z - 83
-                                    elif animated[x] == "Model:Model::lShldr":
+                                    elif fbxBoneName(deepMimicHumanoidJoints[x]) == fbxBoneName('left shoulder'):
                                         pitch = Y
                                         yaw = X 
                                         roll = Z + 83
-                                    elif animated[x] == "Model:Model::rThigh" or animated[x] == "Model:Model::lThigh":
+                                    elif fbxBoneName(deepMimicHumanoidJoints[x]) == fbxBoneName('right hip') or fbxBoneName(deepMimicHumanoidJoints[x]) == fbxBoneName('left hip'):
                                         pitch = Y - 55
                                         yaw = X
                                         roll = Z
-                                    elif animated[x] == "Model:Model::rFoot":
+                                    elif fbxBoneName(deepMimicHumanoidJoints[x]) == fbxBoneName('right ankle'):
                                         pitch = Y - 70
                                         yaw = X + 35
                                         roll = Z + 45
-                                    elif animated[x] == "Model:Model::lFoot":
+                                    elif fbxBoneName(deepMimicHumanoidJoints[x]) == fbxBoneName('left ankle'):
                                         pitch = Y - 70
                                         yaw = X - 35
                                         roll = Z - 45
@@ -238,8 +253,6 @@ for j in range(0,len(onlyfiles)):
                                     #Calculate quaternion angle
                                     quat = euler_to_quaternion(math.radians(yaw), math.radians(pitch), math.radians(roll))
 
-                                    # quat = euler_to_quaternion(math.radians(Z), math.radians(Y), math.radians(X))
-
                                     #Append quaternion angle
                                     keyFrame.append(quat[0])
                                     keyFrame.append(quat[1])
@@ -247,21 +260,20 @@ for j in range(0,len(onlyfiles)):
                                     keyFrame.append(quat[3])
 
                                 else:
-                                    animIndex = indexOfAnimated(animated[x])
+                                    animIndex = indexOfAnimated(fbxBoneName(deepMimicHumanoidJoints[x]))
 
                                     for i in range(0,4):
                                         keyFrame.append(oldKeyframe[animIndex + i])
 
                             #If angle is 1D (Knees and elbows)
                             elif dimensions[x] == 1:
-
                                     #If Knees
-                                    if animated[x] == "Model:Model::rShin" or animated[x] == "Model:Model::lShin":
+                                    if fbxBoneName(deepMimicHumanoidJoints[x]) == fbxBoneName('right knee') or fbxBoneName(deepMimicHumanoidJoints[x]) == fbxBoneName('left knee'):
 
                                         #if angle found, append
                                         #Should be channel X (Unity knee bend) but takes channel Y for some reason
                                         #Perhaps unity reads Y as it's X
-                                        xKey = d["Takes:"][f"Take:{onlyfiles[j][:-9]}"][animated[x]]["Channel:Transform"]["Channel:R"]["Channel:Y"]["Key"]
+                                        xKey = d["Takes:"][f"Take:{onlyfiles[j][:-9]}"][f"Model:Model::{fbxBoneName(deepMimicHumanoidJoints[x])}"]["Channel:Transform"]["Channel:R"]["Channel:Y"]["Key"]
                                         if angleOfKeyAtTime(xKey,listOfTimes[i]):
                                             X = math.radians(float(angleOfKeyAtTime(xKey,listOfTimes[i])))
                                             keyFrame.append(X)
@@ -271,10 +283,10 @@ for j in range(0,len(onlyfiles)):
                                             keyFrame.append(oldKeyframe[x])
 
                                     #If Elbow
-                                    elif animated[x] == "Model:Model::rForeArm" or animated[x] == "Model:Model::lForeArm":
+                                    elif fbxBoneName(deepMimicHumanoidJoints[x]) == fbxBoneName('right elbow') or fbxBoneName(deepMimicHumanoidJoints[x]) == fbxBoneName('left elbow'):
 
                                         #if angle found, append
-                                        yKey = d["Takes:"][f"Take:{onlyfiles[j][:-9]}"][animated[x]]["Channel:Transform"]["Channel:R"]["Channel:Y"]["Key"]
+                                        yKey = d["Takes:"][f"Take:{onlyfiles[j][:-9]}"][f"Model:Model::{fbxBoneName(deepMimicHumanoidJoints[x])}"]["Channel:Transform"]["Channel:R"]["Channel:Y"]["Key"]
                                         if angleOfKeyAtTime(yKey,listOfTimes[i]):
                                             Y = -math.radians(float(angleOfKeyAtTime(yKey,listOfTimes[i])))
                                             
@@ -285,7 +297,7 @@ for j in range(0,len(onlyfiles)):
                                             keyFrame.append(oldKeyframe[x])
                                         
                                     else:
-                                         print(f"Error 1D rotation but type not specified")
+                                        print(f"Error 1D rotation but type not specified")
                             else:
                                 print(f"Error on rotations Loop {x}")
 

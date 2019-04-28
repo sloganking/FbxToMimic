@@ -51,31 +51,9 @@ If your files are not formatted as shown above, they can be fixed with [Blender]
 
 ## Creating a humanoid rig
 
-Currently joints in .fbx files have to be manually assigned by name to the corresponding joints in the Mimic Motion humanoid rig. Right now this is done by putting the json property names of your bones into the "animated" list, located in [/Utils/JsonToMimic.py](./Utils/JsonToMimic.py) in order with the Mimic joints listed below.
+Currently joints in .fbx files have to be manually assigned by name to the corresponding joints in the Mimic Motion humanoid rig. This is done by assigning .fbx model's bone names to the corresponding joint properties in ./Rigs/humanoidRig.json
 
-```
-[
-	duration of frame in seconds (1D),
-	root position (3D),
-	root rotation (4D),
-	chest rotation (4D),
-	neck rotation (4D),
-	right hip rotation (4D),
-	right knee rotation (1D),
-	right ankle rotation (4D),
-	right shoulder rotation (4D),
-	right elbow rotation (1D),
-	left hip rotation (4D),
-	left knee rotation (1D),
-	left ankle rotation (4D),
-	left shoulder rotation (4D),
-	left elbow rotation (1D)
-]
-```
-
-The "animated" list is currently assigned with the bone name properties of all .fbx files located in the [Huge FBX Mocap Library part 1](https://assetstore.unity.com/packages/3d/animations/huge-fbx-mocap-library-part-1-19991) asset found on the Unity asset store.
-
-The current method of creating a humanoid rig just described is not intuative and sloppy at best. It is planned to be replaced by having users assign their .fbx model's bone names into a .json file before conversion. I am currently unaware of how to create or use any algorithms that know how to automatically generate a humanoid rig (similar to how unity can), but am open to using them upon finding one.
+I am currently unaware of how to create or use any algorithms that know how to automatically generate a humanoid rig (similar to how unity can), but am open to using them upon finding one.
 
 ## Running the project
 

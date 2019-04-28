@@ -34,18 +34,18 @@ def getTimesIn(obj):
     for i in range(1,len(animated)):
 
         #Add all new times in item's T channel
-        tSize = len(obj["Takes:"][f"Take:{onlyfiles[j][:-9]}"][animated[i]]["Channel:Transform"]["Channel:T"]["Channel:X"]["Key"])
+        tSize = len(obj["Takes:"][f"Take:{onlyfiles[j][:-9]}"][f"Model:Model::{fbxBoneName(deepMimicHumanoidJoints[i])}"]["Channel:Transform"]["Channel:T"]["Channel:X"]["Key"])
         for x in range(0,tSize):
-            tString = obj["Takes:"][f"Take:{onlyfiles[j][:-9]}"][animated[i]]["Channel:Transform"]["Channel:T"]["Channel:X"]["Key"][x]
+            tString = obj["Takes:"][f"Take:{onlyfiles[j][:-9]}"][f"Model:Model::{fbxBoneName(deepMimicHumanoidJoints[i])}"]["Channel:Transform"]["Channel:T"]["Channel:X"]["Key"][x]
             tTokens = tString.split(",")
             tTime = tTokens[0]
             if tTime not in timeList:
                 timeList.append(tTime)
 
         #Add all new times in item's R channel
-        rSize = len(obj["Takes:"][f"Take:{onlyfiles[j][:-9]}"][animated[i]]["Channel:Transform"]["Channel:R"]["Channel:X"]["Key"])
+        rSize = len(obj["Takes:"][f"Take:{onlyfiles[j][:-9]}"][f"Model:Model::{fbxBoneName(deepMimicHumanoidJoints[i])}"]["Channel:Transform"]["Channel:R"]["Channel:X"]["Key"])
         for x in range(0,rSize):
-            rString = obj["Takes:"][f"Take:{onlyfiles[j][:-9]}"][animated[i]]["Channel:Transform"]["Channel:R"]["Channel:X"]["Key"][x]
+            rString = obj["Takes:"][f"Take:{onlyfiles[j][:-9]}"][f"Model:Model::{fbxBoneName(deepMimicHumanoidJoints[i])}"]["Channel:Transform"]["Channel:R"]["Channel:X"]["Key"][x]
             rTokens = rString.split(",")
             rTime = rTokens[0]
             if rTime not in timeList:
@@ -116,7 +116,7 @@ print("Converting JSON to MimicMotion file")
 # Initilize variables
 animated = ["Seconds", "Model:Model::hip", "Model:Model::hip", "Model:Model::chest","Model:Model::neck","Model:Model::rThigh","Model:Model::rShin","Model:Model::rFoot","Model:Model::rShldr","Model:Model::rForeArm","Model:Model::lThigh","Model:Model::lShin","Model:Model::lFoot","Model:Model::lShldr","Model:Model::lForeArm"]
 # Order is important
-deepMimicHumanoidJoints = ["seconds", "hipPosition", "hip", "chest", "neck", "right hip", "right knee", "right ankle", "right shoulder", "right elbow", "left hip", "left knee", "left ankle", "left shoulder", "left elbow"]
+deepMimicHumanoidJoints = ["seconds", "hip", "hip", "chest", "neck", "right hip", "right knee", "right ankle", "right shoulder", "right elbow", "left hip", "left knee", "left ankle", "left shoulder", "left elbow"]
 dimensions = [1,3,4,4,4,4,1,4,4,1,4,1,4,4,1]
 posLocked = True
 
